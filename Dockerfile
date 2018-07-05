@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 #https://hub.docker.com/r/nvidia/cuda/tags/
+#https://hub.docker.com/r/nvidia/cuda/
 FROM nvidia/cuda:9.0-base-ubuntu16.04
 
 LABEL maintainer="Jupyter Scipybase"
