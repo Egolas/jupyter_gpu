@@ -1,9 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-# Ubuntu 18.04 (bionic) from 2018-04-26
-# https://github.com/docker-library/official-images/commit/aac6a45b9eb2bffb8102353c350d341a410fb169
-FROM ubuntu:bionic-20180426@sha256:c8c275751219dadad8fa56b3ac41ca6cb22219ff117ca98fe82b42f24e1ba64e
+#https://hub.docker.com/r/nvidia/cuda/tags/
+FROM nvidia/cuda:9.0-base-ubuntu16.04
 
 LABEL maintainer="Jupyter Scipybase"
 
