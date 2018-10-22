@@ -174,9 +174,10 @@ RUN conda install --yes \
     rm -rf /home/.cache/yarn && \
     rm -rf /home/.node-gyp 
     
-RUN echo export PATH="/opt/conda/bin:$PATH" >> /root/.bashrc \
-    echo PermitRootLogin yes >> /etc/ssh/sshd_config \
-    echo "root:111111" | chpasswd
+RUN echo export PATH="/opt/conda/bin:$PATH" >> /root/.bashrc 
+RUN echo PermitRootLogin yes >> /etc/ssh/sshd_config 
+RUN echo "root:111111" | chpasswd
+
 CMD ["sudo /etc/init.d/ssh start"]
 
 # Install shellinabox
