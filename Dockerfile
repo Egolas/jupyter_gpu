@@ -1,9 +1,10 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
+#https://hub.docker.com/r/nvidia/cuda/tags/
 #https://hub.docker.com/r/nvidia/cuda/
 #FROM nvidia/cuda:9.0-base-ubuntu16.04
-FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu16.04
 
 LABEL maintainer="Jupyter Scipybase"
 
@@ -166,6 +167,7 @@ RUN conda install --yes \
     #jupyter labextension install jupyterlab_bokeh@^0.6.0 && \
     jupyter labextension install jupyterlab_bokeh@0.6.2 && \
 
+    
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn && \
@@ -174,6 +176,12 @@ RUN conda install --yes \
 RUN echo "root:111111" | chpasswd
 CMD ["sudo /etc/init.d/ssh start"]
 
+# Install shellinabox
+#RUN  git clone https://github.com/shellinabox/shellinabox.git \
+#     cd shellinabox \
+#     autoreconf -i \
+#     ./configure && make
+     
 # Install facets which does not have a pip or conda package at the moment
 #RUN cd /tmp && \
 #    git clone https://github.com/PAIR-code/facets.git && \
