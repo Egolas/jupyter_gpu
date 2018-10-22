@@ -176,7 +176,7 @@ RUN conda install --yes \
     
 RUN echo export PATH="/opt/conda/bin:$PATH" >> /root/.bashrc 
 RUN echo PermitRootLogin yes >> /etc/ssh/sshd_config 
-RUN echo "root:111111" | chpasswd
+#RUN echo "root:111111" | chpasswd
 
 CMD ["sudo /etc/init.d/ssh start"]
 
