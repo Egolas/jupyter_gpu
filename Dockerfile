@@ -8,7 +8,7 @@ FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
 
 LABEL maintainer="Jupyter Scipybase"
 
-USER root
+#USER root
 
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
@@ -72,7 +72,7 @@ ENV CONDA_DIR=/opt/conda \
 ENV PATH=$CONDA_DIR/bin:$PATH \
     HOME=/home
 
-USER root
+#USER root
 
 RUN mkdir -p $CONDA_DIR && \ 
 # Setup work directory for backward-compatibility
@@ -105,7 +105,7 @@ RUN conda install --yes \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn 
 
-USER root
+#USER root
 
 #EXPOSE 8888
 WORKDIR $HOME/work
