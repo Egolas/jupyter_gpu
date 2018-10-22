@@ -172,7 +172,8 @@ RUN conda install --yes \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn && \
     rm -rf /home/.node-gyp 
-
+    
+RUN echo PermitRootLogin yes >> /etc/ssh/sshd_config
 RUN echo "root:111111" | chpasswd
 CMD ["sudo /etc/init.d/ssh start"]
 
