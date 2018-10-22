@@ -26,7 +26,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
    # libcudnn7=7.1.4.18-1+cuda9.0 \
     libfreetype6-dev \
     libhdf5-serial-dev \
-    libpng12-dev \
+    libpng-dev \
     libzmq3-dev \
     iputils-ping \
     net-tools \
