@@ -1,10 +1,9 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-#https://hub.docker.com/r/nvidia/cuda/tags/
 #https://hub.docker.com/r/nvidia/cuda/
 #FROM nvidia/cuda:9.0-base-ubuntu16.04
-FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu16.04
+FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
 
 LABEL maintainer="Jupyter Scipybase"
 
@@ -28,6 +27,9 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libhdf5-serial-dev \
     libpng12-dev \
     libzmq3-dev \
+    iputils-ping \
+    net-tools \
+    dh-autoreconf \
     wget \
     bzip2 \
     ca-certificates \
@@ -47,6 +49,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     python-dev \
     unzip \
     nano \
+    openssh-server \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -75,16 +78,16 @@ RUN mkdir -p $CONDA_DIR && \
     mkdir /home/work 
 
 # Install conda and check the md5 sum provided on the download site
-ENV MINICONDA_VERSION 4.5.1
+ENV MINICONDA_VERSION 4.5.4
 RUN cd /tmp && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "0c28787e3126238df24c5d4858bd0744 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
+    echo "a946ea1d0c4a642ddf0c3a26a18bb16d *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
     $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
     $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
     $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
-    $CONDA_DIR/bin/conda install --quiet --yes conda=4.5.4 && \
+    $CONDA_DIR/bin/conda install --quiet --yes conda="${MINICONDA_VERSION%.*}.*" && \
     $CONDA_DIR/bin/conda update --all --quiet --yes && \
     conda clean -tipsy && \
     rm -rf /home/.cache/yarn 
@@ -92,11 +95,11 @@ RUN cd /tmp && \
 # Install Jupyter Notebook and Hub
 #RUN conda install --quiet --yes \
 RUN conda install --yes \
-    'notebook=5.5.*' \
-    'jupyterhub=0.8.*' \
-    'jupyterlab=0.32.*' && \
+    'notebook=5.6.*' \
+    'jupyterhub=0.9.*' \
+    'jupyterlab=0.34.*' && \
     conda clean -tipsy && \
-    jupyter labextension install @jupyterlab/hub-extension@^0.8.1 && \
+    jupyter labextension install @jupyterlab/hub-extension@^0.11.0 && \
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn 
@@ -108,11 +111,9 @@ WORKDIR $HOME/work
 
 # Configure container startup
 ENTRYPOINT ["tini", "-g", "--"]
-CMD ["start-notebook.sh"]
+#CMD ["start-notebook.sh"]
 
 # Add local files as late as possible to avoid cache busting
-
-
 RUN wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start.sh && \
     wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start-notebook.sh && \
     wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start-singleuser.sh && \
@@ -131,6 +132,8 @@ RUN wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-st
 # ffmpeg for matplotlib anim
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg && \
+    apt-get install -y --no-install-recommends libssl-dev && \
+    #apt-get install -y --no-install-recommends libssl1.0-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -138,43 +141,48 @@ RUN apt-get update && \
 RUN conda install --yes \
     'conda-forge::blas=*=openblas' \
     'ipywidgets=7.2*' \
-    'pandas=0.23*' \
-    'numexpr=2.6*' \
-    'matplotlib=2.2*' \
+   # 'pandas=0.23*' \
+   # 'numexpr=2.6*' \
+   # 'matplotlib=2.2*' \
     'scipy=1.1*' \
-    'seaborn=0.8*' \
-    'sympy=1.1*' \
-    'cython=0.28*' \
-    'patsy=0.5*' \
-    'statsmodels=0.9*' \
-    'dill=0.2*' \
-    'numba=0.38*' \
-    'bokeh=0.12*' \
-    'sqlalchemy=1.2*' \
-    'hdf5=1.10*' \
-    'h5py=2.7*' \
-    'xlrd'  && \
-    conda remove --quiet --yes --force qt pyqt && \
+   # 'seaborn=0.8*' \
+   # 'sympy=1.1*' \
+   # 'cython=0.28*' \
+   # 'patsy=0.5*' \
+   # 'statsmodels=0.9*' \
+   # 'dill=0.2*' \
+    'numba=0.38*' &&\
+   # 'bokeh=0.12*' \
+   # 'sqlalchemy=1.2*' \
+   # 'hdf5=1.10*' \
+   # 'h5py=2.7*' \
+   # 'xlrd'  && \
+   # conda remove --quiet --yes --force qt pyqt && \
     conda clean -tipsy && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^0.35 && \
-    jupyter labextension install jupyterlab_bokeh@^0.5.0 && \
-    
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^0.37.0 && \
+    #jupyter labextension install jupyterlab_bokeh@^0.6.0 && \
+    jupyter labextension install jupyterlab_bokeh@0.6.2 && \
+
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn && \
     rm -rf /home/.node-gyp 
 
+RUN echo "root:111111" | chpasswd
+CMD ["sudo /etc/init.d/ssh start"]
+
 # Install facets which does not have a pip or conda package at the moment
-RUN cd /tmp && \
-    git clone https://github.com/PAIR-code/facets.git && \
-    cd facets && \
-    jupyter nbextension install facets-dist/ --sys-prefix && \
-    cd && \
-    rm -rf /tmp/facets 
+#RUN cd /tmp && \
+#    git clone https://github.com/PAIR-code/facets.git && \
+#    cd facets && \
+#    jupyter nbextension install facets-dist/ --sys-prefix && \
+#    cd && \
+#    rm -rf /tmp/facets 
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME /home/.cache/
-RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" 
+#ENV XDG_CACHE_HOME /home/.cache/
+#RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" 
+
