@@ -4,7 +4,7 @@
 #https://hub.docker.com/r/nvidia/cuda/tags/
 #https://hub.docker.com/r/nvidia/cuda/
 #FROM nvidia/cuda:9.0-base-ubuntu16.04
-FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu16.04
 
 LABEL maintainer="Jupyter Scipybase"
 
