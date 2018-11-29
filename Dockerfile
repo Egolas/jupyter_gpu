@@ -155,13 +155,13 @@ RUN conda install --yes \
    # 'patsy=0.5*' \
    # 'statsmodels=0.9*' \
    # 'dill=0.2*' \
-    'numba=0.38*' &&\
+    'numba=0.38*' \
    # 'bokeh=0.12*' \
    # 'sqlalchemy=1.2*' \
    # 'hdf5=1.10*' \
    # 'h5py=2.7*' \
    # 'xlrd'  && \
-     'pillow=5.3.0' &&\
+     'pillow=5.3*' &&\
    # conda remove --quiet --yes --force qt pyqt && \
     conda clean -tipsy && \
     # Activate ipywidgets extension in the environment that runs the notebook server
