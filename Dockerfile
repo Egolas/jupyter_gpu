@@ -145,7 +145,7 @@ RUN conda install --yes \
     'ipywidgets=7.2*' \
    # 'pandas=0.23*' \
    # 'numexpr=2.6*' \
-   # 'matplotlib=2.2*' \
+    'matplotlib=2.2*' \
     'numpy=1.15*' \
     'scipy=1.1*' \
     'opencv=3.4*' \
