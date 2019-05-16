@@ -4,8 +4,8 @@
 #https://hub.docker.com/r/nvidia/cuda/tags/
 #https://hub.docker.com/r/nvidia/cuda/
 #FROM nvidia/cuda:9.0-base-ubuntu16.04
-#FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
-FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
+#FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
 
 LABEL maintainer="Jupyter Scipybase"
 
@@ -144,7 +144,7 @@ RUN apt-get update && \
 RUN conda install --yes \
     'conda-forge::blas=*=openblas' \
     'ipywidgets=7.2*' \
-   # 'pandas=0.23*' \
+    'pandas=0.23*' \
    # 'numexpr=2.6*' \
     'matplotlib=3.0*' \
     'numpy=1.15*' \
@@ -172,6 +172,7 @@ RUN conda install --yes \
     #jupyter labextension install jupyterlab_bokeh@^0.6.0 && \
     jupyter labextension install jupyterlab_bokeh@0.6.2 && \
 
+    conda update --yes  -n base conda && \
     
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
