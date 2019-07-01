@@ -19,7 +19,7 @@ ENV NCCL_VERSION=2.4.7-1+cuda9.2
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get -yq dist-upgrade \
- && apt-get install -yq --no-install-recommends \
+ && apt-get install -yq --no-install-recommends --allow-change-held-packages \
     build-essential \
     curl \
     libfreetype6-dev \
