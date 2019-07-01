@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 #https://hub.docker.com/r/nvidia/cuda/tags/
-#https://hub.docker.com/r/nvidia/cuda/
+
 #FROM nvidia/cuda:9.0-base-ubuntu16.04
 #FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
 #FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
@@ -18,14 +18,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get -yq dist-upgrade \
  && apt-get install -yq --no-install-recommends \
     build-essential \
-   # cuda-command-line-tools-9-0 \
-   # cuda-cublas-9-0 \
-   # cuda-cufft-9-0 \
-   # cuda-curand-9-0 \
-   # cuda-cusolver-9-0 \
-   # cuda-cusparse-9-0 \
     curl \
-   # libcudnn7=7.1.4.18-1+cuda9.0 \
     libfreetype6-dev \
     libhdf5-serial-dev \
     libpng-dev \
@@ -76,16 +69,15 @@ ENV PATH=$CONDA_DIR/bin:$PATH
    # HOME=/home
 
 #USER root
-
 RUN mkdir -p $CONDA_DIR && \ 
 # Setup work directory for backward-compatibility
     mkdir /home/work 
 
 # Install conda and check the md5 sum provided on the download site
-ENV MINICONDA_VERSION 4.5.4
+ENV MINICONDA_VERSION 4.6.14
 RUN cd /tmp && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "a946ea1d0c4a642ddf0c3a26a18bb16d *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
+    echo "718259965f234088d785cad1fbd7de03* Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
     $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
@@ -99,22 +91,18 @@ RUN cd /tmp && \
 # Install Jupyter Notebook and Hub
 #RUN conda install --quiet --yes \
 RUN conda install --yes \
-    'notebook=5.6.*' \
-    'jupyterhub=0.9.*' \
-    'jupyterlab=0.34.*' && \
+    'notebook=5.7.*' && \
     conda clean -tipsy && \
-    jupyter labextension install @jupyterlab/hub-extension@^0.11.0 && \
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn 
 
 #USER root
-
 #EXPOSE 8888
 WORKDIR $HOME/work
 
 # Configure container startup
-ENTRYPOINT ["tini", "-g", "--"]
+#ENTRYPOINT ["tini", "-g", "--"]
 #CMD ["start-notebook.sh"]
 
 # Add local files as late as possible to avoid cache busting
@@ -123,21 +111,10 @@ RUN wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-st
     wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start-singleuser.sh && \
     wget -P /etc/jupyter/    https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/jupyter_notebook_config.py
 
-
-#RUN wget -P /usr/local/bin/ https://raw.githubusercontent.com/Winowang/jupyter_images/master/run_jupyter.sh && \
-#    wget -P /etc/jupyter/ https://raw.githubusercontent.com/Winowang/jupyter_images/master/jupyter_notebook_config.py 
- 
-#COPY start.sh /usr/local/bin/
-#COPY start-notebook.sh /usr/local/bin/
-#COPY start-singleuser.sh /usr/local/bin/
-#COPY jupyter_notebook_config.py /etc/jupyter/
-
-
 # ffmpeg for matplotlib anim
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg && \
     apt-get install -y --no-install-recommends libssl-dev && \
-    #apt-get install -y --no-install-recommends libssl1.0-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -166,13 +143,7 @@ RUN conda install --yes \
      'pillow=5.3*' &&\
    # conda remove --quiet --yes --force qt pyqt && \
     conda clean -tipsy && \
-    # Activate ipywidgets extension in the environment that runs the notebook server
-    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-    # Also activate ipywidgets extension for JupyterLab
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^0.37.0 && \
-    #jupyter labextension install jupyterlab_bokeh@^0.6.0 && \
-    jupyter labextension install jupyterlab_bokeh@0.6.2 && \
-
+    
     conda update --yes  -n base conda && \
     
     npm cache clean --force && \
@@ -185,22 +156,3 @@ RUN echo PermitRootLogin yes >> /etc/ssh/sshd_config
 #RUN echo "root:111111" | chpasswd
 
 CMD ["sudo /etc/init.d/ssh start"]
-
-# Install shellinabox
-#RUN  git clone https://github.com/shellinabox/shellinabox.git \
-#     cd shellinabox \
-#     autoreconf -i \
-#     ./configure && make
-     
-# Install facets which does not have a pip or conda package at the moment
-#RUN cd /tmp && \
-#    git clone https://github.com/PAIR-code/facets.git && \
-#    cd facets && \
-#    jupyter nbextension install facets-dist/ --sys-prefix && \
-#    cd && \
-#    rm -rf /tmp/facets 
-
-# Import matplotlib the first time to build the font cache.
-#ENV XDG_CACHE_HOME /home/.cache/
-#RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" 
-
