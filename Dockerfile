@@ -99,8 +99,8 @@ RUN cd /tmp && \
 RUN conda install --yes \
     'notebook=5.7.*' && \
     conda clean -tipsy && \
-    npm cache clean --force && \
-    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    #npm cache clean --force && \
+    #rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn 
 
 #USER root
@@ -152,7 +152,7 @@ RUN conda install --yes \
     
     conda update --yes  -n base conda && \
     
-    npm cache clean --force && \
+    #npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn && \
     rm -rf /home/.node-gyp 
