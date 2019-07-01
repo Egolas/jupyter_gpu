@@ -10,6 +10,9 @@ FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu18.04
 
 LABEL maintainer="Jupyter Scipybase"
 
+ENV CUDNN_VERSION=7.5.0.56-1+cuda9.2
+ENV NCCL_VERSION=2.4.7-1+cuda9.2
+
 #USER root
 
 # Install all OS dependencies for notebook server that starts but lacks all
@@ -23,6 +26,9 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libhdf5-serial-dev \
     libpng-dev \
     libzmq3-dev \
+    libcudnn7=${CUDNN_VERSION} \
+    libnccl2=${NCCL_VERSION} \
+    libnccl-dev=${NCCL_VERSION} \
     iputils-ping \
     net-tools \
     dh-autoreconf \
