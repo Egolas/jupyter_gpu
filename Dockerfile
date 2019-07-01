@@ -26,7 +26,7 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libhdf5-serial-dev \
     libpng-dev \
     libzmq3-dev \
-    libcudnn7=${CUDNN_VERSION} \
+    #libcudnn7=${CUDNN_VERSION} \
     libnccl2=${NCCL_VERSION} \
     libnccl-dev=${NCCL_VERSION} \
     iputils-ping \
