@@ -4,9 +4,9 @@
 #https://hub.docker.com/r/nvidia/cuda/tags/
 
 #FROM nvidia/cuda:9.0-base-ubuntu16.04
-#FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
 #FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
-FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu18.04
+#FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu18.04
 
 LABEL maintainer="Jupyter Scipybase"
 
@@ -146,7 +146,7 @@ RUN conda install --yes \
    # 'hdf5=1.10*' \
    # 'h5py=2.7*' \
    # 'xlrd'  && \
-     'pillow=5.3*' &&\
+    'pillow=5.3*' &&\
    # conda remove --quiet --yes --force qt pyqt && \
     conda clean -tipsy && \
     
