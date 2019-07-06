@@ -4,8 +4,8 @@
 #https://hub.docker.com/r/nvidia/cuda/tags/
 
 #FROM nvidia/cuda:9.0-base-ubuntu16.04
-FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
-#FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu18.04
+#FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:10.1-cudnn7-runtime-ubuntu18.04
 #FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu18.04
 
 LABEL maintainer="Jupyter Scipybase"
@@ -27,8 +27,8 @@ RUN apt-get update && apt-get -yq dist-upgrade \
     libpng-dev \
     libzmq3-dev \
     #libcudnn7=${CUDNN_VERSION} \
-    libnccl2=${NCCL_VERSION} \
-    libnccl-dev=${NCCL_VERSION} \
+    #libnccl2=${NCCL_VERSION} \
+    #libnccl-dev=${NCCL_VERSION} \
     iputils-ping \
     net-tools \
     dh-autoreconf \
