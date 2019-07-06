@@ -98,6 +98,7 @@ RUN cd /tmp && \
 #RUN conda install --quiet --yes \
 RUN conda install --yes \
     'notebook=5.7.*' && \
+    'jupyterlab' && \
     conda clean -tipsy && \
     #npm cache clean --force && \
     #rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
