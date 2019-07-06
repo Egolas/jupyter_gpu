@@ -101,30 +101,8 @@ RUN conda install --yes \
     conda clean -tipsy && \
     #npm cache clean --force && \
     #rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-    rm -rf /home/.cache/yarn 
+    #rm -rf /home/.cache/yarn 
 
-#USER root
-#EXPOSE 8888
-WORKDIR $HOME/work
-
-# Configure container startup
-#ENTRYPOINT ["tini", "-g", "--"]
-#CMD ["start-notebook.sh"]
-
-# Add local files as late as possible to avoid cache busting
-RUN wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start.sh && \
-    wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start-notebook.sh && \
-    wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start-singleuser.sh && \
-    wget -P /etc/jupyter/    https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/jupyter_notebook_config.py
-
-# ffmpeg for matplotlib anim
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg && \
-    apt-get install -y --no-install-recommends libssl-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-#RUN conda install --quiet --yes \
 RUN conda install --yes \
     'conda-forge::blas=*=openblas' \
     'ipywidgets=7.2*' \
@@ -156,6 +134,60 @@ RUN conda install --yes \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/.cache/yarn && \
     rm -rf /home/.node-gyp 
+
+#USER root
+#EXPOSE 8888
+WORKDIR $HOME/work
+
+# Configure container startup
+#ENTRYPOINT ["tini", "-g", "--"]
+#CMD ["start-notebook.sh"]
+
+# Add local files as late as possible to avoid cache busting
+RUN wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start.sh && \
+    wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start-notebook.sh && \
+    wget -P /usr/local/bin/  https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/start-singleuser.sh && \
+    wget -P /etc/jupyter/    https://raw.githubusercontent.com/jupyter/docker-stacks/master/base-notebook/jupyter_notebook_config.py
+
+# ffmpeg for matplotlib anim
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ffmpeg && \
+    apt-get install -y --no-install-recommends libssl-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+#RUN conda install --quiet --yes \
+#RUN conda install --yes \
+#    'conda-forge::blas=*=openblas' \
+#    'ipywidgets=7.2*' \
+#    'pandas=0.23*' \
+   # 'numexpr=2.6*' \
+#    'matplotlib=3.0*' \
+#    'numpy=1.15*' \
+#    'scipy=1.1*' \
+#    'opencv=3.4*' \
+   # 'seaborn=0.8*' \
+   # 'sympy=1.1*' \
+   # 'cython=0.28*' \
+   # 'patsy=0.5*' \
+   # 'statsmodels=0.9*' \
+   # 'dill=0.2*' \
+#    'numba=0.38*' \
+   # 'bokeh=0.12*' \
+   # 'sqlalchemy=1.2*' \
+   # 'hdf5=1.10*' \
+   # 'h5py=2.7*' \
+   # 'xlrd'  && \
+#    'pillow=5.3*' &&\
+   # conda remove --quiet --yes --force qt pyqt && \
+#    conda clean -tipsy && \
+    
+#    conda update --yes  -n base conda && \
+    
+    #npm cache clean --force && \
+#    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+#    rm -rf /home/.cache/yarn && \
+#    rm -rf /home/.node-gyp 
     
 RUN echo export PATH="/opt/conda/bin:$PATH" >> /root/.bashrc 
 RUN echo PermitRootLogin yes >> /etc/ssh/sshd_config 
