@@ -99,12 +99,11 @@ RUN cd /tmp && \
 RUN conda install --yes \
     'notebook=5.7.*'  \
     'jupyterlab=0.35.*' \
-    conda clean -tipsy
+    #conda clean -tipsy
     #npm cache clean --force && \
     #rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     #rm -rf /home/.cache/yarn 
-
-RUN conda install --yes \
+#RUN conda install --yes \
     'conda-forge::blas=*=openblas' \
     'ipywidgets=7.2*' \
     'pandas=0.23*' \
