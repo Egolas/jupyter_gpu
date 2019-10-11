@@ -24,7 +24,8 @@ c.NotebookApp.ip = '0.0.0.0'
 c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
 c.NotebookApp.token = u''   # used for login without token 
-c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': "frame-ancestors %s:%s/" % (jupyter_host,jupyter_port)} }
+#c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': "frame-ancestors %s:%s/" % (jupyter_host,jupyter_port)} }
+c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': 'none'} }
 c.NotebookApp.extra_static_paths = ["/etc/jupyter/custom.js"]
 
 # https://github.com/jupyter/notebook/issues/3130
