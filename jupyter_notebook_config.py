@@ -28,6 +28,7 @@ c.NotebookApp.token = u''   # used for login without token
 c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': 'none'} }
 c.NotebookApp.extra_static_paths = ["/etc/jupyter/custom.js"]
 c.NotebookApp.base_url  = 'jupyter/https%3A%2F%2F' + '%s' % (jupyter_host) + '%3A' + '%s' % (jupyter_port)
+c.NotebookApp.notebook_dir = '/'
 
 # https://github.com/jupyter/notebook/issues/3130
 c.FileContentsManager.delete_to_trash = False
